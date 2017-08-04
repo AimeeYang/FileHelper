@@ -1,6 +1,6 @@
-import sys
 import os
 import glob
+import shutil
 
 
 # Refer: https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
@@ -9,7 +9,23 @@ import glob
 
 # TODO use os.listdir, os.walk, can do some modify to file.
 
+# Refer: https://stackoverflow.com/questions/10937350/how-to-check-type-of-files-without-extensions-in-python
+#   can get file type from file content, and without use of file extension information
+
 ClassificationType = ['fileType']
+
+def fileTypeConverter(fileExtension):
+    # here according dict values classify file
+    return {
+        ".pdf": "pdf",
+        ".jpg": "img",
+        ".jpeg": "img",
+        ".png": "img",
+        ".rar": "zip",
+        ".zip": "zip",
+        ".mp3": "mp3",
+        ".mp4": "video",
+    }.get(fileExtension, 'other')
 
 def merge(oriRootDir, outRootDir, classficationBy, logfileName):
     '''
@@ -28,20 +44,35 @@ def merge(oriRootDir, outRootDir, classficationBy, logfileName):
         if not os.path.exists(outRootDir):
             os.makedirs(outRootDir)
         # dirpaths + dirname/ dirpaths + filename => absolute path
-        for (dirpaths, dirnames, filenames) in os.walk(oriRootDir):
-            # logf.write("")
+        for (dirpath, dirnames, filenames) in os.walk(oriRootDir):
             for filename in filenames:
-                print("File: "+filename)
-                info = os.stat(filename)
-                print("File-info: ",end='')
-                print(info)
-            # for dirpath in dirpaths:
-            #     print("Path: "+dirpath)
-            print("Path: ", end='')
-            print(dirpaths)
-            for dirname in dirnames:
-                print("Dirname: "+ dirname)
-                info2 = os.stat
+                # test
+                # fullFileName = os.path.join(dirpath, filename)
+                # fname, fext = os.path.splitext(fullFileName)
+                # print('fname: '+fname)
+                # print('fext: '+fext)
+                fname, fext = os.path.splitext(filename)
+                print('fname: ' + fname)
+                print('fext: ' + fext)
+                folderType = fileTypeConverter(fext)
+                print("folderType: " + folderType)
+                # TODO check if need rename with foler info, like month.. shutil
+                # folderDir =
+            # # logf.write("")
+            # for filename in filenames:
+            #     print("File: "+filename)
+            #     info = os.stat(os.path.join(dirpath, filename))
+            #     print("File-info: ",end='')
+            #     print(info)
+            # # for dirpath in dirpaths:
+            # #     print("Path: "+dirpath)
+            # print("Path: ", end='')
+            # print(dirpath)
+            # for dirname in dirnames:
+            #     print("Dirname: "+ dirname)
+            #     info2 = os.stat(os.path.join(dirpath, dirname))
+            #     print("Dirname-info: ", end='')
+            #     print(info2)
     else:
         print("ParameterError: oriRootDir should exist and should be a directory")
         print("ParameterError: oriRootDir should exist and should be a directory", file=logf)
