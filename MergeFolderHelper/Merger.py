@@ -25,7 +25,10 @@ def fileTypeConverter(fileExtension):
         ".zip": "zip",
         ".mp3": "mp3",
         ".mp4": "video",
+        ".xml": "ignore",
     }.get(fileExtension, 'other')
+
+ignoreFolderType = [".idea", ".ignore"]
 
 def merge(oriRootDir, outRootDir, classficationBy, logf = None, recursiveDir = None ):
     '''
@@ -48,6 +51,8 @@ def merge(oriRootDir, outRootDir, classficationBy, logf = None, recursiveDir = N
             os.makedirs(outRootDir)
         # dirpaths + dirname/ dirpaths + filename => absolute path
         for (dirpath, dirnames, filenames) in os.walk(recursiveDir):
+            if os.path.split(dirpath)[1] in ignoreFolderType:
+                continue
             for filename in filenames:
                 # test
                 # fullFileName = os.path.join(dirpath, filename)
@@ -58,6 +63,8 @@ def merge(oriRootDir, outRootDir, classficationBy, logf = None, recursiveDir = N
                 print('fname: ' + fname)
                 print('fext: ' + fext)
                 folderType = fileTypeConverter(fext)
+                if folderType == "ignore":
+                    continue
                 print("folderType: " + folderType)
                 # TODO check if need rename with folder info, like month.. shutil
                 # folderDir = os.path.join(outRootDir, os.path.split(recursiveDir)[1], folderType, filename)
@@ -96,7 +103,7 @@ def getFilesByType(oriRootDir, fileType):
     :return: file path of the specify type - fileType
     '''
 
-
+# TODO ADD ignore file type and folder type logic
 def verify(oriRootDir, outRootDir, logf = None):
     '''
     check after special operation, no file missing. (By file counts)
@@ -122,9 +129,12 @@ def verify(oriRootDir, outRootDir, logf = None):
 # FIND DOUBLE REASON
 # # 注 下面不需要 for (dirpath, dirnames, filenames) in os.walk(recursiveDir) 已包括下面逻辑
 # for dirname in dirnames:
+# TODO ADD ignore file type and folder type logic
 def fileCount(dir):
     fileCnt = 0
     for dirpath, dirnames, filenames in os.walk(dir):
+        if os.path.split(dirpath)[1] in ignoreFolderType:
+            continue
         fileCnt += len(filenames)
         # # 注 下面不需要 for (dirpath, dirnames, filenames) in os.walk(recursiveDir) 已包括下面逻辑
         # for dirname in dirnames:
