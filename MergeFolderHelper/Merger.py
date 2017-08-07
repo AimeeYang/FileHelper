@@ -27,7 +27,7 @@ def fileTypeConverter(fileExtension):
         ".mp4": "video",
     }.get(fileExtension, 'other')
 
-def merge(oriRootDir, outRootDir, classficationBy, logfileName):
+def merge(oriRootDir, outRootDir, classficationBy, logf = None, recursiveDir = None ):
     '''
     classify all files in oriRootDir by classficationBy, store
     result in outRootDir
@@ -38,13 +38,16 @@ def merge(oriRootDir, outRootDir, classficationBy, logfileName):
     :return: 
     '''
 
-    logf = open(logfileName, 'x')
+    # if logf is None:
+    #     logf = open(logfileName, 'x')
     # Verify para
+    if recursiveDir is None:
+        recursiveDir = oriRootDir
     if os.path.exists(oriRootDir) and os.path.isdir(oriRootDir):
         if not os.path.exists(outRootDir):
             os.makedirs(outRootDir)
         # dirpaths + dirname/ dirpaths + filename => absolute path
-        for (dirpath, dirnames, filenames) in os.walk(oriRootDir):
+        for (dirpath, dirnames, filenames) in os.walk(recursiveDir):
             for filename in filenames:
                 # test
                 # fullFileName = os.path.join(dirpath, filename)
@@ -56,8 +59,13 @@ def merge(oriRootDir, outRootDir, classficationBy, logfileName):
                 print('fext: ' + fext)
                 folderType = fileTypeConverter(fext)
                 print("folderType: " + folderType)
-                # TODO check if need rename with foler info, like month.. shutil
-                # folderDir =
+                # TODO check if need rename with folder info, like month.. shutil
+                # folderDir = os.path.join(outRootDir, os.path.split(recursiveDir)[1], folderType, filename)
+                folderDir = os.path.join(os.path.abspath(outRootDir), os.path.split(oriRootDir)[1], folderType) #, filename)
+                if not os.path.exists(folderDir):
+                    os.makedirs(folderDir)
+                dstFileName = shutil.copy(os.path.join(dirpath,filename), folderDir)
+                print("copy, " + os.path.join(dirpath,filename)+" , to, "+ dstFileName, file=logf)
             # # logf.write("")
             # for filename in filenames:
             #     print("File: "+filename)
@@ -68,7 +76,9 @@ def merge(oriRootDir, outRootDir, classficationBy, logfileName):
             # #     print("Path: "+dirpath)
             # print("Path: ", end='')
             # print(dirpath)
+            # # 注 下面不需要 for (dirpath, dirnames, filenames) in os.walk(recursiveDir) 已包括下面逻辑
             # for dirname in dirnames:
+            #     merge(oriRootDir, outRootDir, classficationBy, logf, os.path.join(dirpath, dirname), )
             #     print("Dirname: "+ dirname)
             #     info2 = os.stat(os.path.join(dirpath, dirname))
             #     print("Dirname-info: ", end='')
@@ -76,7 +86,7 @@ def merge(oriRootDir, outRootDir, classficationBy, logfileName):
     else:
         print("ParameterError: oriRootDir should exist and should be a directory")
         print("ParameterError: oriRootDir should exist and should be a directory", file=logf)
-    logf.close()
+    # logf.close()
 
 def getFilesByType(oriRootDir, fileType):
     '''
@@ -87,7 +97,7 @@ def getFilesByType(oriRootDir, fileType):
     '''
 
 
-def verify(oriRootDir, outRootDir):
+def verify(oriRootDir, outRootDir, logf = None):
     '''
     check after special operation, no file missing. (By file counts)
     :param oriRootDir: 
@@ -97,3 +107,27 @@ def verify(oriRootDir, outRootDir):
             
     '''
     # TODO whether give missing info.
+    tmpOutDir = os.path.join(os.path.abspath(outRootDir), os.path.split(oriRootDir)[1])
+    oriCnt = fileCount(oriRootDir)
+    print("============out==============")
+    outCnt = fileCount(tmpOutDir)
+    if logf is not None:
+        print("source file count: "+str(oriCnt)+", out file count: "+ str(outCnt), file=logf)
+    print("source file count: " + str(oriCnt) + ", out file count: " + str(outCnt))
+    print("verify result: ", end='')
+    print(oriCnt == outCnt)
+    print("verify result: " + str(oriCnt == outCnt), file=logf)
+    return oriCnt == outCnt
+
+# FIND DOUBLE REASON
+# # 注 下面不需要 for (dirpath, dirnames, filenames) in os.walk(recursiveDir) 已包括下面逻辑
+# for dirname in dirnames:
+def fileCount(dir):
+    fileCnt = 0
+    for dirpath, dirnames, filenames in os.walk(dir):
+        fileCnt += len(filenames)
+        # # 注 下面不需要 for (dirpath, dirnames, filenames) in os.walk(recursiveDir) 已包括下面逻辑
+        # for dirname in dirnames:
+        #     fileCnt += fileCount(os.path.join(os.path.abspath(dirpath), dirname))
+    print(dir + " file cnt: "+ str(fileCnt))
+    return fileCnt

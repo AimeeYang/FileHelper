@@ -28,4 +28,19 @@ if __name__ == "__main__":
     classificationType = 'fileType'
     logfileName = './log.txt'
 
-    merger.merge(oriRootDir, outRootDir, classificationType, logfileName)
+    logf = open(logfileName, 'x')
+    merger.merge(oriRootDir, outRootDir, classificationType, logf)
+    merger.verify(oriRootDir, outRootDir, logf)
+    logf.close()
+    # tmpOutDir = os.path.join(os.path.abspath(outRootDir), os.path.split(oriRootDir)[1])
+    # merger.fileCount(tmpOutDir)
+    # cnt = 0
+    # ## 注意下面的循环次数 为所有folder个数 rootfolder + subfolder 个数
+    # for dirpath, dirnames, filenames in os.walk(tmpOutDir):
+    #     cnt += 1
+    #     print("dirpath: " +dirpath)
+    #     print("dirnames: ")
+    #     print(dirnames)
+    #     print("filenames:")
+    #     print(filenames)
+    #     print(str(cnt))
