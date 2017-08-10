@@ -1,4 +1,5 @@
 import MergeFolderHelper.Merger as merger
+import DuplicateFileHelper.Remover as remover
 import os
 
 
@@ -23,15 +24,23 @@ if __name__ == "__main__":
     #     logfileName = input("Please enter 'logfileName' to store log: ")
 
     # for test
-    oriRootDir = 'E:/0-a/ml2'
+    oriRootDir = 'E:/0-tmp'
     outRootDir = './output'
     classificationType = 'fileType'
-    logfileName = './log.txt'
+    logfileName = './log_remove.txt'
 
-    logf = open(logfileName, 'x')
-    merger.merge(oriRootDir, outRootDir, classificationType, logf)
-    merger.verify(oriRootDir, outRootDir, logf)
-    logf.close()
+    rules=['size', 'lastmodifiedtime', 'lastchangedtime']
+    # remove then merge
+    # TODO SOME OPTIMIZE
+    # logf = open(logfileName, 'x')
+
+
+    remover.removeDuplicateFile(oriRootDir,outRootDir, None, rules)
+    # merger.merge(oriRootDir, outRootDir, classificationType, logf)
+    # merger.verify(oriRootDir, outRootDir, logf)
+    # logf.close()
+
+
     # tmpOutDir = os.path.join(os.path.abspath(outRootDir), os.path.split(oriRootDir)[1])
     # merger.fileCount(tmpOutDir)
     # cnt = 0
