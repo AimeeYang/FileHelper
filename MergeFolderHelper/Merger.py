@@ -30,6 +30,7 @@ def fileTypeConverter(fileExtension):
 
 ignoreFolderType = [".idea", ".ignore"]
 
+
 def merge(oriRootDir, outRootDir, classficationBy, logf = None, recursiveDir = None ):
     '''
     classify all files in oriRootDir by classficationBy, store
@@ -135,7 +136,24 @@ def fileCount(dir):
     for dirpath, dirnames, filenames in os.walk(dir):
         if os.path.split(dirpath)[1] in ignoreFolderType:
             continue
-        fileCnt += len(filenames)
+        # TODO ADD ignore file type logic
+        # TODO check if list remove method support with regex
+        # 1. try regex
+        # 2. try glob
+        # 3. scan filenames
+
+        # filenames2 = [x for x in filenames if not (x in ig)]
+
+        # 3. scan filenames
+        filenames2 = []
+        for filename in filenames:
+            filen,fileext = os.path.splitext(filename)
+            foldertype = fileTypeConverter(fileext)
+            if foldertype == "ignore":
+                continue
+            filenames2.append(filename)
+        fileCnt += len(filenames2)
+
         # # 注 下面不需要 for (dirpath, dirnames, filenames) in os.walk(recursiveDir) 已包括下面逻辑
         # for dirname in dirnames:
         #     fileCnt += fileCount(os.path.join(os.path.abspath(dirpath), dirname))
