@@ -57,9 +57,9 @@ if __name__ == "__main__":
     #     print(str(cnt))
 
     # Rename
-    oriRootDir = 'D:\\0-dedao\\15 economics class'
-    outDir = 'E:/0-tmp_2/'
-    fixedPrefix = 'xuezhaofeng'
+    oriRootDir = 'D:\\dir'
+    outDir = 'E:/0-tmp_1/'
+    fixedPrefix = 'xzf'
     regexStr = r'\d+'
     fileType = '.mp3'
     rename.renameWithFixPrefixAndDateInfo(oriRootDir, outDir, fixedPrefix, regexStr, fileType, None)

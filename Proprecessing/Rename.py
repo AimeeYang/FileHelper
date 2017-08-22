@@ -1,6 +1,6 @@
 
 import os
-from os.path import splitext, exists, isdir
+from os.path import splitext, exists, isdir,split
 from shutil import copy
 import Utils.Common as common
 import random
@@ -10,8 +10,8 @@ import glob
 def renameWithFixPrefixAndDateInfo(oriRootDir, outDir, fixedPrefix, regexStr, fileType = None, logf = None):
     '''
     return file name like fixedPrefix+dateinfo(from ori filename)
-    :param oriRootDir: 
-    :param outDir: 
+    :param oriRootDir: source root directory
+    :param outDir: result store directory
     :param fixedPrefix: 
     :param regexStr: r'\d+'
     :param fileType: '.mp3'
@@ -39,7 +39,7 @@ def renameWithFixPrefixAndDateInfo(oriRootDir, outDir, fixedPrefix, regexStr, fi
             dateInfo = ''.join(dateInfos)
             newName = fixedPrefix + dateInfo + parts[1]
             if keepOriname:
-                newName = 'ori_'+filename
+                newName = 'ori_'+split(path)[-1]+"_"+filename
             while exists(os.path.join(outDir, newName)):
                 # path rand => then man deal with duplicate one
                 randnum = random.randint(0, 100)
