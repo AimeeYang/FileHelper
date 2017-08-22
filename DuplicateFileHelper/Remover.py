@@ -9,13 +9,14 @@ ignoreFileType = [".thumb"] #????????????
 directRemoveFileType = [".thumb"]
 # TODO logfile split by loginfo, logerror...
 # TODO ADD IGNORE LOGIG
-def removeDuplicateFile(oriRootDir, tmpDir, logf = None, rules=None):
+def removeDuplicateFile(oriRootDir, tmpDir, logf = None, rules=None, storeDir = None):
     '''
     move dumplicate file to tmpDir.
     :param oriRootDir: 
     :param tmpDir: store duplicate file
     :param logf: maybe {} map, logfiles
     :param rule: maybe[] rule to decide decide leave which one. Option one are 'size', 'lastmodifiedtime', 'lastchangedtime'
+    :param storeDir: if not None, then copy none duplicate file to this folder
     :return: 
     '''
 
