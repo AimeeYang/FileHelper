@@ -1,6 +1,8 @@
 import MergeFolderHelper.Merger as merger
 import DuplicateFileHelper.Remover as remover
+import Proprecessing.Rename as rename
 import os
+import re
 
 
 
@@ -24,18 +26,18 @@ if __name__ == "__main__":
     #     logfileName = input("Please enter 'logfileName' to store log: ")
 
     # for test
-    oriRootDir = 'E:/0-tmp'
-    outRootDir = './output'
-    classificationType = 'fileType'
-    logfileName = './log_remove.txt'
-
-    rules=['size', 'lastmodifiedtime', 'lastchangedtime']
+    # oriRootDir = 'E:/0-tmp'
+    # outRootDir = './output'
+    # classificationType = 'fileType'
+    # logfileName = './log_remove.txt'
+    #
+    # rules=['size', 'lastmodifiedtime', 'lastchangedtime']
     # remove then merge
     # TODO SOME OPTIMIZE
     # logf = open(logfileName, 'x')
 
 
-    remover.removeDuplicateFile(oriRootDir,outRootDir, None, rules)
+    # remover.removeDuplicateFile(oriRootDir,outRootDir, None, rules)
     # merger.merge(oriRootDir, outRootDir, classificationType, logf)
     # merger.verify(oriRootDir, outRootDir, logf)
     # logf.close()
@@ -53,3 +55,13 @@ if __name__ == "__main__":
     #     print("filenames:")
     #     print(filenames)
     #     print(str(cnt))
+
+    # Rename
+    oriRootDir = 'D:\\0-dedao\\15 economics class'
+    outDir = 'E:/0-tmp_2/'
+    fixedPrefix = 'xuezhaofeng'
+    regexStr = r'\d+'
+    fileType = '.mp3'
+    rename.renameWithFixPrefixAndDateInfo(oriRootDir, outDir, fixedPrefix, regexStr, fileType, None)
+    print("verify result: "+ str(rename.verify(oriRootDir, outDir, fileType)))
+    print("End Rname")
