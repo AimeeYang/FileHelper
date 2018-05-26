@@ -52,3 +52,7 @@ def verify(oriDir, outDir, fileType):
     filePattern = "**\\*"+fileType
     return len(glob.glob(os.path.join(oriDir+'\\'+"**\\*"+fileType), recursive=True)) - \
            len(glob.glob(os.path.join(outDir + '\\' + "**\\*" + fileType), recursive=True))
+
+def fileInfo(oriDir,fileType):
+    for i in glob.glob(os.path.join(oriDir+'\\'+"**\\*"+fileType), recursive=True):
+        print(i)

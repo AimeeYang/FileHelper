@@ -1,8 +1,9 @@
 import MergeFolderHelper.Merger as merger
 import DuplicateFileHelper.Remover as remover
 import Proprecessing.Rename as rename
-import os
+from collect_file import collect_file
 import re
+import glob
 
 
 
@@ -58,10 +59,12 @@ if __name__ == "__main__":
 
     # Rename
     oriRootDir = 'D:\\dir'
-    outDir = 'E:/0-tmp_1/'
-    fixedPrefix = 'xzf'
+    outDir = 'D:/0-tmp_1/'
+    fixedPrefix = ''
     regexStr = r'\d+'
     fileType = '.mp3'
-    rename.renameWithFixPrefixAndDateInfo(oriRootDir, outDir, fixedPrefix, regexStr, fileType, None)
+    # rename.renameWithFixPrefixAndDateInfo(oriRootDir, outDir, fixedPrefix, regexStr, fileType, None)
+    collect_file(oriRootDir,outDir,fileType)
     print("verify result: "+ str(rename.verify(oriRootDir, outDir, fileType)))
+    # rename.fileInfo(oriRootDir,fileType)
     print("End Rname")
